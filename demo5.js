@@ -10,7 +10,7 @@ const bootstrapMultiAddress = location.search.replace(/^\?/, '')
   // create libp2p options with pubsub and custom boostrap
   const libp2pOptions = libp2pDefaults()
   libp2pOptions.services.pubsub = gossipsub({allowPublishToZeroPeers: true})
-  delete libp2pOptions.services.delegatedRouting
+  // delete libp2pOptions.services.delegatedRouting
   libp2pOptions.peerDiscovery = [bootstrap({list: [bootstrapMultiAddress]})]
   // not sure why needed, doesn't connect without it
   libp2pOptions.connectionGater = {denyDialMultiaddr: async () => false}
