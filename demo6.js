@@ -21,7 +21,7 @@ import { strings } from '@helia/strings'
 document.title = 'v12'
 
 const log = (...args) => {
-    console.log(...args)
+    // console.log(...args)
     const logHtml = (...args) => {
         const p = document.createElement('p')
         let textContent = ''
