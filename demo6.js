@@ -17,7 +17,7 @@ import { createHelia } from 'helia'
 import { libp2pDefaults } from './node_modules/helia/dist/src/utils/libp2p-defaults.browser.js'
 // import { circuitRelayTransport } from '@libp2p/circuit-relay-v2'
 
-document.title = 'v6'
+document.title = 'v7'
 
 const log = (...args) => {
     console.log(...args)
@@ -155,7 +155,7 @@ setInterval(async () => {
         addresses: peer.addresses.map(a => a.multiaddr),
         protocols: peer.protocols
     }))
-    log(`${formattedPeers.length} connected peers`, formattedPeers)
+    log(`${formattedPeers.length} connected peers`, peers)
 }, 10000)
 
 } catch (e) {
