@@ -17,7 +17,7 @@ import { createHelia } from 'helia'
 import { libp2pDefaults } from './node_modules/helia/dist/src/utils/libp2p-defaults.browser.js'
 // import { circuitRelayTransport } from '@libp2p/circuit-relay-v2'
 
-document.title = 'v9'
+document.title = 'v10'
 
 const log = (...args) => {
     console.log(...args)
@@ -87,7 +87,8 @@ const bootstrapConfig = {
         // "/dnsaddr/bootstrap.libp2p.io/p2p/QmbLHAnMoJPWSCR5Zhtx6BHJX9KiKNN6tpvbUcqanj75Nb",
         // "/dnsaddr/bootstrap.libp2p.io/p2p/QmcZf59bWwK5XFi76CZX8cbJ4BhTzzA3gU1ZjYZcYW3dwt",
         // "/ip4/104.131.131.82/tcp/4001/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ",
-        "/ip4/198.244.135.238/udp/4001/quic-v1/webtransport/certhash/uEiAqkg9apyxkeyxB08GdkarVXZ9MnlxXnrvA94vOKhZ9yQ/certhash/uEiBtL6pMamgvmDrSqGZFtBdtJBGezUiX2HNfjI6ym8g86w/p2p/12D3KooWFjjmzK1c574YezCuq5c94vjkS8jS2SawGq8RALAV3DkY"
+        // "/ip4/198.244.135.238/udp/4001/quic-v1/webtransport/certhash/uEiAqkg9apyxkeyxB08GdkarVXZ9MnlxXnrvA94vOKhZ9yQ/certhash/uEiBtL6pMamgvmDrSqGZFtBdtJBGezUiX2HNfjI6ym8g86w/p2p/12D3KooWFjjmzK1c574YezCuq5c94vjkS8jS2SawGq8RALAV3DkY"
+        "/ip4/141.94.176.120/udp/4001/quic-v1/webtransport/certhash/uEiBISXc1TB-skd6C-dWQ1EjN_cw54F30faFulMcpUxEUUw/certhash/uEiCaIfQ63VqC2NA2iqKven8t0VyJ9Hc7ctgG5mcL0a9HFw/p2p/12D3KooWFD5wCuWRE7syauvg38cFm9AgGJSB4A5b4SpfPGpuydD4"
     ]
 }
 
