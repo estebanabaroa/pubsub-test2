@@ -18,7 +18,7 @@ import { libp2pDefaults } from './node_modules/helia/dist/src/utils/libp2p-defau
 import { strings } from '@helia/strings'
 // import { circuitRelayTransport } from '@libp2p/circuit-relay-v2'
 
-document.title = 'v12'
+document.title = 'v13'
 
 const log = (...args) => {
     // console.log(...args)
@@ -137,7 +137,7 @@ const node1 = await createNode1()
 log('node1', node1.getMultiaddrs())
 
 const s = strings(window.helia)
-console.log(await s.get(myImmutableAddress))
+console.log(await s.get('QmZkWEsFRCMxbJEePtNcKpvSdU5MAHKHtyjThGiDxKgq3W'))
 
 // const topic = 'demo'
 
