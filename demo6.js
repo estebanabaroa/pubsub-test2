@@ -17,7 +17,7 @@ import { createHelia } from 'helia'
 import { libp2pDefaults } from './node_modules/helia/dist/src/utils/libp2p-defaults.browser.js'
 // import { circuitRelayTransport } from '@libp2p/circuit-relay-v2'
 
-document.title = 'v3'
+document.title = 'v4'
 
 const log = (...args) => {
     console.log(...args)
@@ -118,7 +118,7 @@ const createNode1 = async () => {
     const libp2pOptions = libp2pDefaults()
     libp2pOptions.services.pubsub = gossipsub({allowPublishToZeroPeers: true})
     // delete libp2pOptions.services.delegatedRouting
-    // libp2pOptions.peerDiscovery = [bootstrap(bootstrapConfig)]
+    libp2pOptions.peerDiscovery = [bootstrap(bootstrapConfig)]
     // not sure why needed, doesn't connect without it
     libp2pOptions.connectionGater = {denyDialMultiaddr: async () => false}
 
