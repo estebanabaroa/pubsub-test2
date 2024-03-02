@@ -16,9 +16,11 @@ import { webSockets } from '@libp2p/websockets'
 import { createHelia } from 'helia'
 import { libp2pDefaults } from './node_modules/helia/dist/src/utils/libp2p-defaults.browser.js'
 import { strings } from '@helia/strings'
+import { CID } from 'multiformats/cid'
+import { bitswap } from '@helia/block-brokers'
 // import { circuitRelayTransport } from '@libp2p/circuit-relay-v2'
 
-document.title = 'v13'
+document.title = 'v21'
 
 const log = (...args) => {
     // console.log(...args)
@@ -124,20 +126,21 @@ const createNode1 = async () => {
     // not sure why needed, doesn't connect without it
     libp2pOptions.connectionGater = {denyDialMultiaddr: async () => false}
 
-    const helia = await createHelia({libp2p: libp2pOptions})
+    const helia = await createHelia({
+        libp2p: libp2pOptions,
+        blockBrokers: [bitswap()]
+    })
 
     logEvents('node1', helia.libp2p)
     window.node1 = helia.libp2p
-    window.helia = helia
+    window.s = strings(helia)
+
     return helia.libp2p
 }
 const node1 = await createNode1()
 
 // log addresses
 log('node1', node1.getMultiaddrs())
-
-const s = strings(window.helia)
-console.log(await s.get('QmZkWEsFRCMxbJEePtNcKpvSdU5MAHKHtyjThGiDxKgq3W'))
 
 // const topic = 'demo'
 
@@ -166,6 +169,11 @@ setInterval(async () => {
     ))
     log(`${peers.length} connected peers`, peers)
 }, 10000)
+
+// try fetching something
+setInterval(async () => {
+    console.log(await window.s.get(CID.parse('QmZkWEsFRCMxbJEePtNcKpvSdU5MAHKHtyjThGiDxKgq3W')))
+}, 2000)
 
 } catch (e) {
     log(e.stack)
