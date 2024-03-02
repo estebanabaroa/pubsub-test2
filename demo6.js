@@ -13,9 +13,11 @@ import { identify } from '@libp2p/identify'
 import { kadDHT } from '@libp2p/kad-dht'
 import { webRTCDirect } from '@libp2p/webrtc'
 import { webSockets } from '@libp2p/websockets'
+import { createHelia } from 'helia'
+import { libp2pDefaults } from './node_modules/helia/dist/src/utils/libp2p-defaults.browser.js'
 // import { circuitRelayTransport } from '@libp2p/circuit-relay-v2'
 
-document.title = 'v1'
+document.title = 'v2'
 
 const log = (...args) => {
     console.log(...args)
@@ -80,39 +82,48 @@ try {
 
 const bootstrapConfig = {
     list: [
-        "/dnsaddr/bootstrap.libp2p.io/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN",
-        "/dnsaddr/bootstrap.libp2p.io/p2p/QmQCU2EcMqAqQPR2i9bChDtGNJchTbq5TbXJJ16u19uLTa",
+        // "/dnsaddr/bootstrap.libp2p.io/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN",
+        // "/dnsaddr/bootstrap.libp2p.io/p2p/QmQCU2EcMqAqQPR2i9bChDtGNJchTbq5TbXJJ16u19uLTa",
         "/dnsaddr/bootstrap.libp2p.io/p2p/QmbLHAnMoJPWSCR5Zhtx6BHJX9KiKNN6tpvbUcqanj75Nb",
-        "/dnsaddr/bootstrap.libp2p.io/p2p/QmcZf59bWwK5XFi76CZX8cbJ4BhTzzA3gU1ZjYZcYW3dwt",
-        "/ip4/104.131.131.82/tcp/4001/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ",
+        // "/dnsaddr/bootstrap.libp2p.io/p2p/QmcZf59bWwK5XFi76CZX8cbJ4BhTzzA3gU1ZjYZcYW3dwt",
+        // "/ip4/104.131.131.82/tcp/4001/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ",
     ]
 }
 
 const createNode1 = async () => {
-    const node = await createLibp2p({
-        peerDiscovery: [
-            bootstrap(bootstrapConfig)
-        ],
-        transports: [
-            webSockets(),
-            webTransport(),
-            webRTCDirect(),
-            // circuitRelayTransport({discoverRelays: 1}) // TODO: test this later, probably need to upgrade libp2p, also test protocol autonat and protocol dcutr
-        ],
-        streamMuxers: [yamux(), mplex()],
-        connectionEncryption: [noise()],
-        connectionGater: {
-            // not sure why needed, doesn't connect without it
-            denyDialMultiaddr: async () => false,
-        },
-        services: {
-            identify: identify(),
-            dht: kadDHT({}),
-            pubsub: gossipsub({allowPublishToZeroPeers: true})
-        }
-    })
-    logEvents('node1', node)
-    return node
+    // const node = await createLibp2p({
+    //     peerDiscovery: [
+    //         bootstrap(bootstrapConfig)
+    //     ],
+    //     transports: [
+    //         webSockets(),
+    //         webTransport(),
+    //         webRTCDirect(),
+    //         // circuitRelayTransport({discoverRelays: 1}) // TODO: test this later, probably need to upgrade libp2p, also test protocol autonat and protocol dcutr
+    //     ],
+    //     streamMuxers: [yamux(), mplex()],
+    //     connectionEncryption: [noise()],
+    //     connectionGater: {
+    //         // not sure why needed, doesn't connect without it
+    //         denyDialMultiaddr: async () => false,
+    //     },
+    //     services: {
+    //         identify: identify(),
+    //         dht: kadDHT({}),
+    //         pubsub: gossipsub({allowPublishToZeroPeers: true})
+    //     }
+    // })
+    // create libp2p options with pubsub and custom boostrap
+    const libp2pOptions = libp2pDefaults()
+    libp2pOptions.services.pubsub = gossipsub({allowPublishToZeroPeers: true})
+    // delete libp2pOptions.services.delegatedRouting
+    // libp2pOptions.peerDiscovery = [bootstrap(bootstrapConfig)]
+    // not sure why needed, doesn't connect without it
+    libp2pOptions.connectionGater = {denyDialMultiaddr: async () => false}
+
+    const helia = await createHelia({libp2p: libp2pOptions})
+    logEvents('node1', helia.libp2p)
+    return helia.libp2p
 }
 const node1 = await createNode1()
 
