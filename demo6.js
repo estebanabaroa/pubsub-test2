@@ -17,7 +17,7 @@ import { createHelia } from 'helia'
 import { libp2pDefaults } from './node_modules/helia/dist/src/utils/libp2p-defaults.browser.js'
 // import { circuitRelayTransport } from '@libp2p/circuit-relay-v2'
 
-document.title = 'v7'
+document.title = 'v8'
 
 const log = (...args) => {
     console.log(...args)
@@ -149,13 +149,15 @@ setInterval(() => {
 
 // print connected peers
 setInterval(async () => {
-    const peers = await Promise.all(node1.getPeers().map(peerId => node1.peerStore.get(peerId)))
-    const formattedPeers = peers.map(peer => ({
-        id: peer.id,
-        addresses: peer.addresses.map(a => a.multiaddr),
-        protocols: peer.protocols
-    }))
-    log(`${formattedPeers.length} connected peers`, peers)
+    const peers = await Promise.all(node1.getPeers().map(peerId => 
+        node1.peerStore.get(peerId)
+        .then(peer => ({
+            id: peer.id,
+            addresses: peer.addresses.map(a => a.multiaddr),
+            protocols: peer.protocols
+        }))
+    ))
+    log(`${peers.length} connected peers`, peers)
 }, 10000)
 
 } catch (e) {
