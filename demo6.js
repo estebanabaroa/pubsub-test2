@@ -18,7 +18,7 @@ import { libp2pDefaults } from './node_modules/helia/dist/src/utils/libp2p-defau
 import { strings } from '@helia/strings'
 // import { circuitRelayTransport } from '@libp2p/circuit-relay-v2'
 
-document.title = 'v10'
+document.title = 'v11'
 
 const log = (...args) => {
     console.log(...args)
