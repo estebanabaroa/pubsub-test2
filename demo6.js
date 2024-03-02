@@ -17,7 +17,7 @@ import { createHelia } from 'helia'
 import { libp2pDefaults } from './node_modules/helia/dist/src/utils/libp2p-defaults.browser.js'
 // import { circuitRelayTransport } from '@libp2p/circuit-relay-v2'
 
-document.title = 'v4'
+document.title = 'v6'
 
 const log = (...args) => {
     console.log(...args)
@@ -84,10 +84,10 @@ const bootstrapConfig = {
     list: [
         // "/dnsaddr/bootstrap.libp2p.io/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN",
         // "/dnsaddr/bootstrap.libp2p.io/p2p/QmQCU2EcMqAqQPR2i9bChDtGNJchTbq5TbXJJ16u19uLTa",
-        // "/dnsaddr/bootstrap.libp2p.io/p2p/QmbLHAnMoJPWSCR5Zhtx6BHJX9KiKNN6tpvbUcqanj75Nb",
+        "/dnsaddr/bootstrap.libp2p.io/p2p/QmbLHAnMoJPWSCR5Zhtx6BHJX9KiKNN6tpvbUcqanj75Nb",
         // "/dnsaddr/bootstrap.libp2p.io/p2p/QmcZf59bWwK5XFi76CZX8cbJ4BhTzzA3gU1ZjYZcYW3dwt",
         // "/ip4/104.131.131.82/tcp/4001/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ",
-        "/ip4/198.244.135.238/udp/4001/quic-v1/webtransport/certhash/uEiAqkg9apyxkeyxB08GdkarVXZ9MnlxXnrvA94vOKhZ9yQ/certhash/uEiBtL6pMamgvmDrSqGZFtBdtJBGezUiX2HNfjI6ym8g86w/p2p/12D3KooWFjjmzK1c574YezCuq5c94vjkS8jS2SawGq8RALAV3DkY"
+        // "/ip4/198.244.135.238/udp/4001/quic-v1/webtransport/certhash/uEiAqkg9apyxkeyxB08GdkarVXZ9MnlxXnrvA94vOKhZ9yQ/certhash/uEiBtL6pMamgvmDrSqGZFtBdtJBGezUiX2HNfjI6ym8g86w/p2p/12D3KooWFjjmzK1c574YezCuq5c94vjkS8jS2SawGq8RALAV3DkY"
     ]
 }
 
@@ -124,6 +124,7 @@ const createNode1 = async () => {
 
     const helia = await createHelia({libp2p: libp2pOptions})
     logEvents('node1', helia.libp2p)
+    window.node1 = helia.libp2p
     return helia.libp2p
 }
 const node1 = await createNode1()
@@ -145,6 +146,17 @@ setInterval(() => {
     console.error(err)
   })
 }, 1000)
+
+// print connected peers
+setInterval(async () => {
+    const peers = await Promise.all(node1.getPeers().map(peerId => node1.peerStore.get(peerId)))
+    const formattedPeers = peers.map(peer => ({
+        id: peer.id,
+        addresses: peer.addresses.map(a => a.multiaddr),
+        protocols: peer.protocols
+    }))
+    log(`${formattedPeers} connected peers`, formattedPeers)
+}, 10000)
 
 } catch (e) {
     log(e.stack)
