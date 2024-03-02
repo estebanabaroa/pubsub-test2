@@ -155,7 +155,7 @@ setInterval(async () => {
         addresses: peer.addresses.map(a => a.multiaddr),
         protocols: peer.protocols
     }))
-    log(`${formattedPeers} connected peers`, formattedPeers)
+    log(`${formattedPeers.length} connected peers`, formattedPeers)
 }, 10000)
 
 } catch (e) {
