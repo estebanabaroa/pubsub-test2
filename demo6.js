@@ -15,6 +15,7 @@ import { webRTCDirect } from '@libp2p/webrtc'
 import { webSockets } from '@libp2p/websockets'
 import { createHelia } from 'helia'
 import { libp2pDefaults } from './node_modules/helia/dist/src/utils/libp2p-defaults.browser.js'
+import { strings } from '@helia/strings'
 // import { circuitRelayTransport } from '@libp2p/circuit-relay-v2'
 
 document.title = 'v10'
@@ -118,12 +119,13 @@ const createNode1 = async () => {
     // create libp2p options with pubsub and custom boostrap
     const libp2pOptions = libp2pDefaults()
     libp2pOptions.services.pubsub = gossipsub({allowPublishToZeroPeers: true})
-    // delete libp2pOptions.services.delegatedRouting
+    delete libp2pOptions.services.delegatedRouting
     libp2pOptions.peerDiscovery = [bootstrap(bootstrapConfig)]
     // not sure why needed, doesn't connect without it
     libp2pOptions.connectionGater = {denyDialMultiaddr: async () => false}
 
     const helia = await createHelia({libp2p: libp2pOptions})
+
     logEvents('node1', helia.libp2p)
     window.node1 = helia.libp2p
     return helia.libp2p
@@ -133,20 +135,23 @@ const node1 = await createNode1()
 // log addresses
 log('node1', node1.getMultiaddrs())
 
-const topic = 'demo'
+const s = strings(helia)
+console.log(await s.get(myImmutableAddress))
+
+// const topic = 'demo'
 
 // sub
-node1.services.pubsub.addEventListener('message', (evt) => {
-    log(`node1: ${evt.detail.from}: ${uint8ArrayToString(evt.detail.data)} on topic ${evt.detail.topic}`)
-})
-await node1.services.pubsub.subscribe(topic)
+// node1.services.pubsub.addEventListener('message', (evt) => {
+//     log(`node1: ${evt.detail.from}: ${uint8ArrayToString(evt.detail.data)} on topic ${evt.detail.topic}`)
+// })
+// await node1.services.pubsub.subscribe(topic)
 
-// pub
-setInterval(() => {
-  node1.services.pubsub.publish(topic, uint8ArrayFromString(`demo message from node 2 ${node1.peerId}`)).catch(err => {
-    console.error(err)
-  })
-}, 1000)
+// // pub
+// setInterval(() => {
+//   node1.services.pubsub.publish(topic, uint8ArrayFromString(`demo message from node 2 ${node1.peerId}`)).catch(err => {
+//     console.error(err)
+//   })
+// }, 1000)
 
 // print connected peers
 setInterval(async () => {
