@@ -19,7 +19,7 @@ mkdir -p /home/test-ipfs
 cd /home/test-ipfs
 
 # reinstall kubo
-# rm -fr kubo .ipfs
+# rm -fr kubo
 # wget https://dist.ipfs.tech/kubo/v0.26.0/kubo_v0.26.0_linux-amd64.tar.gz
 # tar -xvzf kubo_v0.26.0_linux-amd64.tar.gz
 # mv kubo/ipfs kubo/test-ipfs
@@ -31,10 +31,10 @@ rm -fr ./.ipfs
 IPFS_PATH=./.ipfs kubo/test-ipfs init
 IPFS_PATH=./.ipfs kubo/test-ipfs config --json Addresses.Gateway '\"/ip4/127.0.0.1/tcp/23850\"'
 IPFS_PATH=./.ipfs kubo/test-ipfs config --json Addresses.API '\"/ip4/127.0.0.1/tcp/23851\"'
-IPFS_PATH=./.ipfs kubo/test-ipfs config --json Addresses.Swarm '[\"/ip4/0.0.0.0/tcp/23852\",\"/ip6/::/tcp/23852\",\"/ip4/0.0.0.0/udp/23852/quic-v1\",\"/ip4/0.0.0.0/udp/23852/quic-v1/webtransport\"]'
+# IPFS_PATH=./.ipfs kubo/test-ipfs config --json Addresses.Swarm '[\"/ip4/0.0.0.0/tcp/23852\",\"/ip6/::/tcp/23852\",\"/ip4/0.0.0.0/udp/23852/quic-v1\",\"/ip4/0.0.0.0/udp/23852/quic-v1/webtransport\"]'
 IPFS_PATH=./.ipfs kubo/test-ipfs config show
 
-IPFS_PATH=./.ipfs kubo/test-ipfs daemon --enable-pubsub-experiment &
+IPFS_PATH=./.ipfs kubo/test-ipfs daemon --migrate --enable-pubsub-experiment &
 sleep 10
 IPFS_PATH=./.ipfs kubo/test-ipfs pubsub sub demo &
 while true; do echo 'hello from kubo' | IPFS_PATH=./.ipfs kubo/test-ipfs pubsub pub demo; sleep 1; done
